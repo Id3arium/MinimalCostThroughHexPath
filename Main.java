@@ -38,7 +38,6 @@ class Main {
 			while (sc.hasNextLine()) {
 				String nextLine = sc.nextLine();
 				if (!nextLine.isEmpty()) {
-					// delimiters include whitespace, carriage return, and newline
 					String delims = "[ ]+";
 					String[] tokens = nextLine.split(delims);
 					index = Integer.valueOf(tokens[0]) - 1;
