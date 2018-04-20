@@ -4,7 +4,8 @@ import java.util.Scanner;
 
 class Main {
     public static void main(String[] args) {
-  		readGridFromFile("input.txt");
+  		int[] weights = readGridFromFile("input.txt");
+        makeGraph(weights);
 	
     } // End main()
     
@@ -29,7 +30,7 @@ class Main {
   	} // End writeRandomGrid()
   	
   	public static int[] readGridFromFile(String fileName){
-		int[] grid = new int[233];
+		int[] grid = new int[234];
 		int cost; //used to convert the token to an integer
 		int index; //index for the grid
 		
@@ -40,7 +41,7 @@ class Main {
 				if (!nextLine.isEmpty()) {
 					String delims = "[ ]+";
 					String[] tokens = nextLine.split(delims);
-					index = Integer.valueOf(tokens[0]) - 1;
+					index = Integer.valueOf(tokens[0]);
 					cost = Integer.valueOf(tokens[1]);
 					
 					grid[index] = cost;  
@@ -57,4 +58,22 @@ class Main {
 		
 		return grid;
 	} // End readGridFromFile()
+  
+  public static makeGraph(int[] weights){
+  	//for each node:
+    //check all 6 neighbours and if their index is in the range 1 to 233, create the edge.
+  		for(int i = 1; i <= 233; i++) {
+        	for(int j = 1 ;j <= 6;j++)
+        	if ( i <= 1 || i >= 233){
+            //dont make connction
+            }
+    		if((i - 1) % 15 == 0){
+            	// dont make top left and bottom left connections
+            } // End if
+            	
+            if((i - 8) % 15 == 0) {
+            	// dont make top right and bottom right connections
+            } // End if
+        } // End for
+  } // End makeGraph()
 } // End class Main
