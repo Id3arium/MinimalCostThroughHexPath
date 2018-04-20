@@ -34,7 +34,7 @@ class Main {
   	
   	public static void readGridFromFile(String fileName){
 		int [] grid = new int [233];
-		int index; //index for the grid
+		int index = 0; //index for the grid
 		int val; //used to convert the token to an integer
 		
 		try {
