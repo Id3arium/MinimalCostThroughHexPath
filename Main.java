@@ -28,7 +28,7 @@ class Main {
 		} // End try
   	} // End writeRandomGrid()
   	
-  	public static void readGridFromFile(String fileName){
+  	public static int[] readGridFromFile(String fileName){
 		int[] grid = new int[233];
 		int cost; //used to convert the token to an integer
 		int index; //index for the grid
@@ -48,11 +48,13 @@ class Main {
 			} // End while
 			
 			for(int i = 0; i < grid.length; i++)
-				    System.out.println(grid[i]);
+				System.out.println(grid[i]);
 				    
 			sc.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} // End try
+		
+		return grid;
 	} // End readGridFromFile()
 } // End class Main
