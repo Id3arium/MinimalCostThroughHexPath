@@ -29,7 +29,7 @@ class Main {
   	} // End writeRandomGrid()
   	
   	public static void readGridFromFile(String fileName){
-		int [] grid = new int [233];
+		int[] grid = new int[233];
 		int cost; //used to convert the token to an integer
 		int index; //index for the grid
 		
