@@ -4,12 +4,7 @@ import java.util.Scanner;
 
 class Main {
     public static void main(String[] args) {
-  		int [] grid = new int[233];
-  		writeRandomGridToFile("input.txt");
-  		//readGridFromFile("input.txt");
-  		
-  		HexGrid hexGrid = new HexGrid();
-  		hexGrid.printGrid(grid);
+  		readGridFromFile("input.txt");
 	
     } // End main()
     
@@ -36,20 +31,24 @@ class Main {
   	public static void readGridFromFile(String fileName){
 		int [] grid = new int [233];
 		int val; //used to convert the token to an integer
+		int index; //index for the grid
 		
 		try {
-			Scanner sc = new Scanner(new File(filename));
+			Scanner sc = new Scanner(new File(fileName));
 			while (sc.hasNextLine()) {
 				String nextLine = sc.nextLine();
 				if (!nextLine.isEmpty()) {
-					//delimiters include whitespace, carriage return, and newline
-					String delims = "\\s*\\r?\\n\\s*";
+					// delimiters include whitespace, carriage return, and newline
+					String delims = "[ ]+";
 					String[] tokens = nextLine.split(delims);
+					index = Integer.valueOf(tokens[0]) - 1;
 					val = Integer.valueOf(tokens[1]);
 					
-					//tokens[0[] is the index
-					grid[tokens[0]] = val;  
-				}
+					grid[index] = val;  
+					
+					for(int i = 0; i < grid.length; i++)
+					    System.out.println(grid[i]);
+				} // End if
 			} // End while
 			sc.close();
 		} catch (FileNotFoundException e) {
