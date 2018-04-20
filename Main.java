@@ -34,7 +34,6 @@ class Main {
   	
   	public static void readGridFromFile(String fileName){
 		int [] grid = new int [233];
-		int index = 0; //index for the grid
 		int val; //used to convert the token to an integer
 		
 		try {
@@ -45,10 +44,10 @@ class Main {
 					//delimiters include whitespace, carriage return, and newline
 					String delims = "\\s*\\r?\\n\\s*";
 					String[] tokens = nextLine.split(delims);
-					val = Integer.valueOf(tokens[0]);
+					val = Integer.valueOf(tokens[1]);
 					
-					grid[index] = val;  
-					index++;
+					//tokens[0[] is the index
+					grid[tokens[0]] = val;  
 				}
 			} // End while
 			sc.close();
