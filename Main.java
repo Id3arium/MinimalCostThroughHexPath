@@ -30,7 +30,7 @@ class Main {
   	
   	public static void readGridFromFile(String fileName){
 		int [] grid = new int [233];
-		int val; //used to convert the token to an integer
+		int cost; //used to convert the token to an integer
 		int index; //index for the grid
 		
 		try {
@@ -42,14 +42,15 @@ class Main {
 					String delims = "[ ]+";
 					String[] tokens = nextLine.split(delims);
 					index = Integer.valueOf(tokens[0]) - 1;
-					val = Integer.valueOf(tokens[1]);
+					cost = Integer.valueOf(tokens[1]);
 					
-					grid[index] = val;  
-					
-					for(int i = 0; i < grid.length; i++)
-					    System.out.println(grid[i]);
+					grid[index] = cost;  
 				} // End if
 			} // End while
+			
+			for(int i = 0; i < grid.length; i++)
+				    System.out.println(grid[i]);
+				    
 			sc.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
