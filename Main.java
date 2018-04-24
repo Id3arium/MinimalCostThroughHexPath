@@ -21,12 +21,12 @@ class Main {
 		    	} else {
 		    		pw.printf("%d  -1\n",i);
 		    	} // End if
-		    }
+	    }
 	    } catch(IOException e){
 	    	e.printStackTrace();
 	    } finally {
 	    	pw.close();
-		} // End try
+	    } // End try
   	} // End writeRandomGrid()
   	
   	public static int[] readGridFromFile(String fileName){
@@ -60,20 +60,77 @@ class Main {
 	} // End readGridFromFile()
   
   public static makeGraph(int[] weights){
+  	for(int i = 1; i <= 233; i++) {
+    	//make all 233 nodes with no edges
+    }
   	//for each node:
-    //check all 6 neighbours and if their index is in the range 1 to 233, create the edge.
+    //check all 6 neighbors and if their index is in the range 1 to 233, create the edge.
   		for(int i = 1; i <= 233; i++) {
+      	//for each of the 6 directions check if legal
         	for(int j = 1 ;j <= 6;j++)
-        	if ( i <= 1 || i >= 233){
-            //dont make connction
-            }
-    		if((i - 1) % 15 == 0){
-            	// dont make top left and bottom left connections
-            } // End if
-            	
-            if((i - 8) % 15 == 0) {
-            	// dont make top right and bottom right connections
-            } // End if
+          		//TD: if up is legal
+              	
+              	//make edge from i to direction in nodes. make a new edge in the nodes neighbours array.
+              //TODO: if up is legal
+              //TODO: if upRight is legal
+              //TODO: if downRight is legal
+              //TODO: if down is legal
+              //TODO: if downLeft is legal
+	      //TODO: if upLeft is legal
+              
+              checkIfNotLegal(){
+              	if ( i < 1 || i > 233){
+                
+                }
+                if((i - 1) % 15 == 0){
+                  // dont make top left and bottom left connections
+                } // End if
+
+                if((i - 8) % 15 == 0) {
+                  // dont make top right and bottom right connections
+                } // End if
+              }
+            
+            
         } // End for
   } // End makeGraph()
 } // End class Main
+
+/*
+
+		class Node{
+
+        public final String value;
+        public double g_scores;
+        public final double h_scores; 	// local wieght
+        public double f_scores = 0;
+        public Edge[] adjacencies;
+        public Node cameFrom; 	
+
+        public Node(String val, double hVal){
+                value = val;
+                h_scores = hVal;
+        }
+				
+        public Node getUpNode(){
+        	//this.index + 15;   
+          return 
+        }
+
+        public String toString(){
+                return value;
+        }
+
+}
+
+		class Edge{
+        public final double cost;
+        public final Node target;
+
+        public Edge(Node targetNode, double costVal){
+                target = targetNode;
+                cost = costVal;
+        }
+}
+
+*/
