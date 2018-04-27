@@ -31,7 +31,7 @@ class Main {
   	
   	public static int[] readGridFromFile(String fileName){
 		int[] grid = new int[234];
-		int cost; //used to convert the token to an integer
+		int weight; //used to convert the token to an integer
 		int index; //index for the grid
 		
 		try {
@@ -42,9 +42,9 @@ class Main {
 					String delims = "[ ]+";
 					String[] tokens = nextLine.split(delims);
 					index = Integer.valueOf(tokens[0]);
-					cost = Integer.valueOf(tokens[1]);
+					weight = Integer.valueOf(tokens[1]);
 					
-					grid[index] = cost;  
+					grid[index] = weight;  
 				} // End if
 			} // End while
 			
@@ -137,12 +137,12 @@ class Main {
 }
 
 		class Edge{
-        public final double cost;
+        public final double weight;
         public final Node target;
 
-        public Edge(Node targetNode, double costVal){
+        public Edge(Node targetNode, double w){
                 target = targetNode;
-                cost = costVal;
+                weight = w;
         }
 }
 
