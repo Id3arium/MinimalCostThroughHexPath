@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 class Main {
     public static void main(String[] args) {
-  		int[] weights = readGridFromFile("input.txt");
+  	int[] weights = readGridFromFile("input.txt");
         makeGraph(weights);
 	
     } // End main()
@@ -13,14 +13,14 @@ class Main {
 	    PrintWriter pw = null;
 	    Random rn = new Random();
 	    try {
-			pw = new PrintWriter(new FileWriter(fileName));
-			for (int i = 1; i <= 233; i++) {
-				double randNum = rn.nextDouble();
-		    	if(randNum > 0.75){
-		    		pw.printf("%d   %d\n",i,rn.nextInt(9)+1);
-		    	} else {
-		    		pw.printf("%d  -1\n",i);
-		    	} // End if
+		pw = new PrintWriter(new FileWriter(fileName));
+		for (int i = 1; i <= 233; i++) {
+			double randNum = rn.nextDouble();
+		if(randNum > 0.75){
+			pw.printf("%d   %d\n",i,rn.nextInt(9)+1);
+		} else {
+			pw.printf("%d  -1\n",i);
+		} // End if
 	    }
 	    } catch(IOException e){
 	    	e.printStackTrace();
@@ -59,40 +59,53 @@ class Main {
 		return grid;
 	} // End readGridFromFile()
   
-  public static makeGraph(int[] weights){
+  ppublic static makeGraph(int[] weights){
   	for(int i = 1; i <= 233; i++) {
     	//make all 233 nodes with no edges
+      int w = weights[i];
+      Node node = new Node(i,w);
     }
   	//for each node:
     //check all 6 neighbors and if their index is in the range 1 to 233, create the edge.
   		for(int i = 1; i <= 233; i++) {
       	//for each of the 6 directions check if legal
-        	for(int j = 1 ;j <= 6;j++)
+        	if ( isLegalIndex(i - 15)){//if up is legal
+    			//make up edge
+    			Edge edge = new Edge();
+    		}
+    		if (isLegalIndex(i - 15)){
+    			//TODO: if upRight is legal
+    		}
+    		if ( isLegalIndex(i - 15)){
+    			//if up is legal
+    			//make up edge
+    			Edge edge = new Edge();
+    		}if ( isLegalIndex(i - 15)){
+    			//if up is legal
+    			//make up edge
+    			Edge edge = new Edge();
+    		}if ( isLegalIndex(i - 15)){
+    			//if up is legal
+    			//make up edge
+    			Edge edge = new Edge();
+    		}if ( isLegalIndex(i - 15)){
+    			//if up is legal
+    			//make up edge
+    			Edge edge = new Edge();
+    		}
+    	}
           		//TD: if up is legal
               	
               	//make edge from i to direction in nodes. make a new edge in the nodes neighbours array.
-              //TODO: if up is legal
-              //TODO: if upRight is legal
+              
+              
               //TODO: if downRight is legal
               //TODO: if down is legal
               //TODO: if downLeft is legal
 	      //TODO: if upLeft is legal
               
-              checkIfNotLegal(){
-              	if ( i < 1 || i > 233){
-                
-                }
-                if((i - 1) % 15 == 0){
-                  // dont make top left and bottom left connections
-                } // End if
-
-                if((i - 8) % 15 == 0) {
-                  // dont make top right and bottom right connections
-                } // End if
-              }
-            
-            
         } // End for
+        
   } // End makeGraph()
 } // End class Main
 
