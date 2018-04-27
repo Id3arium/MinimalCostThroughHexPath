@@ -86,26 +86,26 @@ class Main {
     //check all 6 neighbors and if their index is in the range 1 to 233, create the edge.
   		for(int i = 1; i <= 233; i++) {
       	//for each of the 6 directions check if legal
-        	if ( isLegalIndex(i - 15)){//if up is legal
-    			//make up edge
-    			Edge edge = new Edge();
+        	if (isLegalIndex(i - 15)){        // UP neighbor
+    			//TODO: if upRight is legal
     		}
-    		if (isLegalIndex(i - 15)){//if upRight is legal
-    			
-    		}
-    		if ( isLegalIndex(i - 7)){
+    		if ( isLegalIndex(i - 7)){        // up-Right neighbor
     			//if up is legal
     			//make up edge
     			Edge edge = new Edge();
-    		}if ( isLegalIndex(i - 15)){
+    		}if ( isLegalIndex(i + 8)){       // down-Right neighbor
     			//if up is legal
     			//make up edge
     			Edge edge = new Edge();
-    		}if ( isLegalIndex(i - 15)){
+    		}if ( isLegalIndex(i + 15)){      // DOWN neighbor
     			//if up is legal
     			//make up edge
     			Edge edge = new Edge();
-    		}if ( isLegalIndex(i - 15)){
+    		}if ( isLegalIndex(i + 7)){       // down-Left neighbor
+    			//if up is legal
+    			//make up edge
+    			Edge edge = new Edge();
+    		}if ( isLegalIndex(i - 8)){       // up-Right neighbor
     			//if up is legal
     			//make up edge
     			Edge edge = new Edge();
