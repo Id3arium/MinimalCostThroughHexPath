@@ -58,12 +58,29 @@ class Main {
 		
 		return grid;
 	} // End readGridFromFile()
-  
+	
+  public static boolean isLegalIndex(int i){
+  		if ( i < 1 || i > 233){
+        	return false;
+        }
+        if((i - 1) % 15 == 0){
+        	return false;	
+          // dont make top left and bottom left connections
+          return false;
+        } 
+        if((i - 8) % 15 == 0) {
+          // dont make top right and bottom right connections
+          return false;
+        } 
+        return true;
+  }
+	
   ppublic static makeGraph(int[] weights){
-  	for(int i = 1; i <= 233; i++) {
+      for(int i = 1; i <= 233; i++) {
     	//make all 233 nodes with no edges
       int w = weights[i];
       Node node = new Node(i,w);
+      System.out.Println("created node: "+ node);
     }
   	//for each node:
     //check all 6 neighbors and if their index is in the range 1 to 233, create the edge.
@@ -73,10 +90,10 @@ class Main {
     			//make up edge
     			Edge edge = new Edge();
     		}
-    		if (isLegalIndex(i - 15)){
-    			//TODO: if upRight is legal
+    		if (isLegalIndex(i - 15)){//if upRight is legal
+    			
     		}
-    		if ( isLegalIndex(i - 15)){
+    		if ( isLegalIndex(i - 7)){
     			//if up is legal
     			//make up edge
     			Edge edge = new Edge();
@@ -109,41 +126,45 @@ class Main {
   } // End makeGraph()
 } // End class Main
 
-/*
 
-		class Node{
 
-        public final String value;
+class Node{
+
+        public final int index;
+        public final int weight;
+        public Edge[] neighbors;
+        
+        public Node cameFrom;
+        
+        /*
         public double g_scores;
         public final double h_scores; 	// local wieght
         public double f_scores = 0;
-        public Edge[] adjacencies;
-        public Node cameFrom; 	
-
-        public Node(String val, double hVal){
-                value = val;
-                h_scores = hVal;
-        }
-				
+        */
+        public Node(int i, int w){
+	    index = i;
+	    weight = w;
+        }			
+				/*
         public Node getUpNode(){
         	//this.index + 15;   
-          return 
+          return  
         }
-
+        */
         public String toString(){
-                return value;
+            return "index: " + index + "weight: " + weight;
         }
 
 }
 
-		class Edge{
-        public final double weight;
-        public final Node target;
+class Edge{
+	public final double weight;
+	public final Node target;
 
-        public Edge(Node targetNode, double w){
-                target = targetNode;
-                weight = w;
-        }
+	public Edge(Node targetNode, double w){
+		target = targetNode;
+		weight = w;
+}
 }
 
 */
