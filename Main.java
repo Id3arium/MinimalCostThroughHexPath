@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 class Main {
     public static void main(String[] args) {
-		int[] weights = readGridFromFile("input.txt");
+		int[] weights = readGridFromFile("C:\\Users\\Alex\\Documents\\NetBeansProjects\\HexagonalMazeSolver\\src\\input.txt");
 		Node[] graph = makeGraph(weights);
 
 		printGrid(graph);
@@ -59,27 +59,26 @@ class Main {
 	public static void printGrid(int[] grid) {
 		int i = 1;
 		while (true) {
-			//if ()
-			for (int j = 0; j < 8; j++) {
+			for (int j = 0; j < 8; j++) { //print outer row that has 8 hexagons
 				if (i >= 233) {
 					return;
 				}
 				if (grid[i] == -1) {
-					System.out.print("***   ");
+					System.out.print("***   "); //print nothing for the -1's
 				} else {
-					System.out.format("%03d   ", grid[i]);
+					System.out.format("%03d   ", grid[i]); //print the weight
 				}
 				i++;
 			}
 			System.out.print("\n   ");
-			for (int k = 0; k < 7; k++) {
+			for (int k = 0; k < 7; k++) { //print inner row that has 7 hexagons between 2 outer rows
 				if (i >= 233) {
 					return;
 				}
 				if (grid[i] == -1) {
-					System.out.print("***   ");
+					System.out.print("***   "); //print nothing for the -1's
 				} else {
-					System.out.format("%03d   ", grid[i]);
+					System.out.format("%03d   ", grid[i]); //print the weight
 				}
 				i++;
 			}
@@ -119,13 +118,13 @@ class Main {
 	}
 
 	public static boolean isLegalIndex(int i) {
-		if (i < 1 || i > 233) {
+		if (i < 1 || i > 233) {	//dont make top or bottom connections
 			return false;
 		}
-		if ((i - 1) % 15 == 0) {
+		if ((i - 1) % 15 == 0) { //dont make top left and bottom left connections
 			return false;
 		}
-		if ((i - 8) % 15 == 0) { // dont make top right and bottom right connections
+		if ((i - 8) % 15 == 0) { //dont make top right and bottom right connections
 			return false;
 		}
 		return true;
@@ -137,44 +136,36 @@ class Main {
 			int w = weights[i];
 			Node node = new Node(i, w);
 			graph[i] = node;
-			System.out.println("created node: " + node);
+			System.out.println("created node " + node);
 		}
-		//for each node:
-		//check all 6 neighbors and if their index is in the range 1 to 233, create the edge.
 		for (int i = 1; i <= 233; i++) {
-			//for each of the 6 directions check if legal
-			if (isLegalIndex(i - 15)) {        // UP neighbor
+			//for every node check if each of the 6 directions is legal and make 
+			//an edge to the node at that direction if it is.
+			if (isLegalIndex(i - 15)) {        // Up neighbor
 				Edge edge = new Edge(graph[i-15]);
-				graph[i-15].neighbours.add(edge);
+				graph[i].neighbours.add(edge); // add edge from node at index i to node at index i-15
 			}
-			if (isLegalIndex(i - 7)) {        // UP neighbor
+			if (isLegalIndex(i - 7)) {        // UpRight neighbor
 				Edge edge = new Edge(graph[i-7]);
-				graph[i-15].neighbours.add(edge);
+				graph[i].neighbours.add(edge); // add edge from node at index i to node at index i-7
 			}
-			if (isLegalIndex(i + 8)) {        // UP neighbor
+			if (isLegalIndex(i + 8)) {        // DownRight neighbor
 				Edge edge = new Edge(graph[i+8]);
-				graph[i-15].neighbours.add(edge);
+				graph[i].neighbours.add(edge); // add edge from node at index i to node at index i+8
 			}
-			if (isLegalIndex(i + 15)) {        // UP neighbor
+			if (isLegalIndex(i + 15)) {        // Down neighbor
 				Edge edge = new Edge(graph[i+15]);
-				graph[i-15].neighbours.add(edge);
+				graph[i].neighbours.add(edge); //add edge from node at index i to node at index i+15
 			}
-			if (isLegalIndex(i + 7)) {        // UP neighbor
+			if (isLegalIndex(i + 7)) {        // DownLeft neighbor
 				Edge edge = new Edge(graph[i+7]);
-				graph[i-15].neighbours.add(edge);
+				graph[i].neighbours.add(edge); // add edge from node at index i to node at index i+7
 			}
-			if (isLegalIndex(i + 8)) {        // UP neighbor
-				Edge edge = new Edge(graph[i+8]);
-				graph[i-15].neighbours.add(edge);
+			if (isLegalIndex(i - 8)) {        // UpLeft neighbor
+				Edge edge = new Edge(graph[i-8]);
+				graph[i].neighbours.add(edge); // add edge from node at index i to node at index i-8
 			}
 		}
-		//TD: if up is legal
-
-		//make edge from i to direction in nodes. make a new edge in the nodes neighbours array.
-		//TODO: if downRight is legal
-		//TODO: if down is legal
-		//TODO: if downLeft is legal
-		//TODO: if upLeft is legal
 		return graph;
 	}
 
@@ -227,6 +218,7 @@ class Main {
 		}
 		System.out.println("MINIMAL-COST PATH COSTS: " + totalCost);
 	}
+	
 	
 } // End class Main
 
