@@ -222,45 +222,50 @@ class Main {
 	
 } // End class Main
 
+class Node {
 
+	public int index;
+	public int weight;  //the cost to come to here from the previous node
+	public int distToEnd = 0; //euclidean distance to the end node (in edges). 
+	public int totalWeight;
+	public ArrayList<Edge> neighbours = new ArrayList<>();
+	public Node cameFrom; //the node that points to this node
 
-class Node{
-
-        public final int index;
-        public final int weight;
-        public Edge[] neighbors;
-        
-        public Node cameFrom;
-        
-        /*
-        public double g_scores;
-        public final double h_scores; 	// local wieght
-        public double f_scores = 0;
-        */
-        public Node(int i, int w){
-	    index = i;
-	    weight = w;
-        }			
-				/*
-        public Node getUpNode(){
-        	//this.index + 15;   
-          return  
-        }
-        */
-        public String toString(){
-            return "index: " + index + "weight: " + weight;
-        }
-
-}
-
-class Edge{
-	public final double weight;
-	public final Node target;
-
-	public Edge(Node targetNode, double w){
-		target = targetNode;
+	int[] distanceToEnd = {99999, 14, 12, 10, 8, 6, 4, 2, 0,
+		13, 11, 9, 7, 5, 3, 1,
+		14, 12, 10, 8, 6, 4, 2, 1,
+		13, 11, 9, 7, 5, 3, 2,
+		14, 12, 10, 8, 6, 4, 3, 2,
+		13, 11, 9, 7, 5, 4, 3,
+		14, 12, 10, 8, 6, 5, 4, 3,
+		13, 11, 9, 7, 6, 5, 4,
+		14, 12, 10, 8, 7, 6, 5, 4,
+		13, 11, 9, 8, 7, 6, 5,
+		14, 12, 10, 9, 8, 7, 6, 5,
+		13, 11, 10, 9, 8, 7, 6,
+		14, 12, 11, 10, 9, 8, 7, 6,
+		13, 12, 11, 10, 9, 8, 7,
+		14, 13, 12, 11, 10, 9, 8, 7
+	};
+	//public double f_scores = 0;
+	public Node(int i, int w) {
+		index = i;
 		weight = w;
-}
-}
+		//distToEnd = distanceToEnd[i];
+		//totalWeight = weight + distToEnd;
+	}
+	public String toString() {
+		return "index: " + index + " weight: " + weight;
+	}
 
-*/
+}
+class Edge {
+
+	public int weight; //the cost to go to the next node
+	public Node target; //the node this edge points to
+
+	public Edge(Node targetNode) {
+		target = targetNode;
+		weight = targetNode.weight;
+	}
+}
