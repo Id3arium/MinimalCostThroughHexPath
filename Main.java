@@ -268,14 +268,13 @@ class Node {
     21, 20, 19, 18, 17, 16, 15, 14,
       21, 20, 19, 18, 17, 16, 15,
     22, 21, 20, 19, 18, 17, 16, 15}; // end of array
-	}; //end of Node class
 
 	//public double f_scores = 0;
 	public Node(int i, int w) {
 		index = i;
 		weight = w;
-		//distToEnd = distanceToEnd[i];
-		//totalWeight = weight + distToEnd;
+		distToEnd = distanceToEnd[i];
+		totalWeight = weight + distToEnd;
 	}
 	public String toString() {
 		return "index: " + index + " weight: " + weight;
