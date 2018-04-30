@@ -190,24 +190,45 @@ class Main {
 				}
 			}
 		});
-		
+
 		queue.add(start);
-		System.out.println("starting cost: "+start.weight);
+		System.out.println("\nstarting cost: " + start.weight);
 		while ((!queue.isEmpty()) && (!endReached)) {
 			Node curr = queue.poll();
 			visited[curr.index] = true;
-			if (curr.index == end.index){
+			if (curr.index == end.index) {
 				endReached = true;
 			}
-			for (Edge e : curr.neighbours){
+			curr.bestCostToHere = curr.weight;
+			for (Edge e : curr.neighbours) {/*
 				if (e.target.weight == -1){
 					continue;
-				}
-				Node neighbour = e.target;
+				}*/
 				
-				int tempTotalCost = neighbour.distToEnd + e.weight;
+				Node neighbour = e.target;
+				int weight = e.weight;
+				int tempWeight = curr.bestCostToHere + weight;
+				int tempTotalCost = neighbour.distToEnd + tempWeight;
+				//if neighbour node has been visited and the newer totalWeight is higher, skip it
+				if ((visited[neighbour.index] )	&& (tempTotalCost >= neighbour.totalWeight)) {
+					continue;
+				}
+				
+				else if((!queue.contains(neighbour)) || (tempTotalCost < neighbour.totalWeight)){
+					neighbour.cameFrom = curr;
+					neighbour.bestCostToHere = tempWeight;
+					neighbour.totalWeight = tempTotalCost;
+
+					if(queue.contains(neighbour)){
+							queue.remove(neighbour);
+					}
+					//System.out.Println("");
+					queue.add(neighbour);
+				}
+				
 			}
 		}
+		System.out.println("Finished A star");
 	}
 
 	public static void printPath(Node endNode) {
