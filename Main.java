@@ -253,42 +253,43 @@ class Node {
 	public int index;
 	public int weight;  //the cost to come to here from the previous node
 	public int distToEnd = 0; //euclidean distance to the end node (in edges). 
-	public int totalWeight;
+	public int bestCostToHere;
+	public int totalWeight; //combined heuristic. weight + distToEnd.
 	public ArrayList<Edge> neighbours = new ArrayList<>();
 	public Node cameFrom; //the node that points to this node
 
-	int[] distanceToEnd = {99999, 
-    14, 12, 10, 8, 6, 4, 2, 0,
-     13, 11, 9, 7, 5, 3, 1,
-    14, 12, 10, 8, 6, 4, 2, 1,
-      13, 11, 9, 7, 5, 3, 2,
-    14, 12, 10, 8, 6, 4, 3, 2,
-      13, 11, 9, 7, 5, 4, 3,
-    14, 12, 10, 8, 6, 5, 4, 3,
-      13, 11, 9, 7, 6, 5, 4,
-    14, 12, 10, 8, 7, 6, 5, 4,
-      13, 11, 9, 8, 7, 6, 5,
-    14, 12, 10, 9, 8, 7, 6, 5,
-      13, 11, 10, 9, 8, 7, 6,
-    14, 12, 11, 10, 9, 8, 7, 6,
-      13, 12, 11, 10, 9, 8, 7,
-    14, 13, 12, 11, 10, 9, 8, 7,
-      14, 13, 12, 11, 10, 9, 8,
-    15, 14, 13, 12, 11, 10, 9, 8,
-      15, 14, 13, 12, 11, 10, 9,
-    16, 15, 14, 13, 12, 11, 10, 9,
-      16, 15, 14, 13, 12, 11, 10,
-    17, 16, 15, 14, 13, 12, 11, 10,
-      17, 16, 15, 14, 13, 11, 10,
-    18, 17, 16, 15, 14, 13, 12, 11,
-      18, 17, 16, 15, 14, 13, 12,
-    19, 18, 17, 16, 15, 14, 13, 12,
-      19, 18, 17, 16, 15, 14, 13,
-    20, 19, 18, 17, 16, 15, 14, 13,
-      20, 19, 18, 17, 16, 15, 14,
-    21, 20, 19, 18, 17, 16, 15, 14,
-      21, 20, 19, 18, 17, 16, 15,
-    22, 21, 20, 19, 18, 17, 16, 15}; // end of array
+	int[] distanceToEnd = {99999,
+		14, 12, 10, 8, 6, 4, 2, 0,
+		13, 11, 9, 7, 5, 3, 1,
+		14, 12, 10, 8, 6, 4, 2, 1,
+		13, 11, 9, 7, 5, 3, 2,
+		14, 12, 10, 8, 6, 4, 3, 2,
+		13, 11, 9, 7, 5, 4, 3,
+		14, 12, 10, 8, 6, 5, 4, 3,
+		13, 11, 9, 7, 6, 5, 4,
+		14, 12, 10, 8, 7, 6, 5, 4,
+		13, 11, 9, 8, 7, 6, 5,
+		14, 12, 10, 9, 8, 7, 6, 5,
+		13, 11, 10, 9, 8, 7, 6,
+		14, 12, 11, 10, 9, 8, 7, 6,
+		13, 12, 11, 10, 9, 8, 7,
+		14, 13, 12, 11, 10, 9, 8, 7,
+		14, 13, 12, 11, 10, 9, 8,
+		15, 14, 13, 12, 11, 10, 9, 8,
+		15, 14, 13, 12, 11, 10, 9,
+		16, 15, 14, 13, 12, 11, 10, 9,
+		16, 15, 14, 13, 12, 11, 10,
+		17, 16, 15, 14, 13, 12, 11, 10,
+		17, 16, 15, 14, 13, 11, 10,
+		18, 17, 16, 15, 14, 13, 12, 11,
+		18, 17, 16, 15, 14, 13, 12,
+		19, 18, 17, 16, 15, 14, 13, 12,
+		19, 18, 17, 16, 15, 14, 13,
+		20, 19, 18, 17, 16, 15, 14, 13,
+		20, 19, 18, 17, 16, 15, 14,
+		21, 20, 19, 18, 17, 16, 15, 14,
+		21, 20, 19, 18, 17, 16, 15,
+		22, 21, 20, 19, 18, 17, 16, 15};
 
 	//public double f_scores = 0;
 	public Node(int i, int w) {
@@ -297,11 +298,22 @@ class Node {
 		distToEnd = distanceToEnd[i];
 		totalWeight = weight + distToEnd;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Node)) {
+			return false;
+		}
+		Node n = (Node) o;
+		return this.index == n.index && this.weight == n.weight && this.distToEnd == n.distToEnd;
+	}
+
 	public String toString() {
-		return "index: " + index + " weight: " + weight;
+		return "index: " + index + " weight: " + weight + " came form " + cameFrom.index;
 	}
 
 }
+
 class Edge {
 
 	public int weight; //the cost to go to the next node
@@ -310,5 +322,18 @@ class Edge {
 	public Edge(Node targetNode) {
 		target = targetNode;
 		weight = targetNode.weight;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Edge)) {
+			return false;
+		}
+		Edge e = (Edge) o;
+		return this.target.equals(e.target) && this.target.cameFrom.equals(e.target.cameFrom);
+	}
+	
+	public String toString() {
+		return "from: " + target.cameFrom.index + " to: " + target.index;
 	}
 }
