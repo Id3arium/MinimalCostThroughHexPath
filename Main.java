@@ -13,7 +13,7 @@ class Main {
 		Node[] graph = makeGraph(weights);
 
 		printGrid(graph);
-		AStarSearch(graph[226], graph[8]);
+		AStarSearch(graph[226], graph[8]); //end should be 8
 
 		printPath(graph[8]);
 	} // End main()
@@ -137,37 +137,41 @@ class Main {
 
 	public static Node[] makeGraph(int[] weights) {
 		Node[] graph = new Node[234];
-		for (int i = 1; i <= 233; i++) { //make all 233 nodes with no edges
+		for (int i = 0; i <= 233; i++) { //make all 233 nodes with no edges
 			int w = weights[i];
 			Node node = new Node(i, w);
 			graph[i] = node;
-			System.out.println("created node " + node);
+			//System.out.println("created node " + node);
 		}
 		for (int i = 1; i <= 233; i++) {
 			//for every node check if each of the 6 directions is legal and make 
 			//an edge to the node at that direction if it is.
-			if (isLegalIndex(i - 15)) {        // Up neighbor
-				Edge edge = new Edge(graph[i-15]);
+			if (graph[i].weight == -1) { //if this node has weight -1 dont make any edges
+				continue;
+			}
+			//check every direction and if it is a legal index and doesnt have a weight of -1
+			if (isLegalIndex(i - 15) && graph[i - 15].weight != -1) {        // Up neighbor
+				Edge edge = new Edge(graph[i - 15]);
 				graph[i].neighbours.add(edge); // add edge from node at index i to node at index i-15
 			}
-			if (isLegalIndex(i - 7)) {        // UpRight neighbor
-				Edge edge = new Edge(graph[i-7]);
+			if (isLegalIndex(i - 7) && graph[i - 7].weight != -1) {        // UpRight neighbor
+				Edge edge = new Edge(graph[i - 7]);
 				graph[i].neighbours.add(edge); // add edge from node at index i to node at index i-7
 			}
-			if (isLegalIndex(i + 8)) {        // DownRight neighbor
-				Edge edge = new Edge(graph[i+8]);
+			if (isLegalIndex(i + 8) && graph[i + 8].weight != -1) {        // DownRight neighbor
+				Edge edge = new Edge(graph[i + 8]);
 				graph[i].neighbours.add(edge); // add edge from node at index i to node at index i+8
 			}
-			if (isLegalIndex(i + 15)) {        // Down neighbor
-				Edge edge = new Edge(graph[i+15]);
+			if (isLegalIndex(i + 15) && graph[i + 15].weight != -1) {        // Down neighbor
+				Edge edge = new Edge(graph[i + 15]);
 				graph[i].neighbours.add(edge); //add edge from node at index i to node at index i+15
 			}
-			if (isLegalIndex(i + 7)) {        // DownLeft neighbor
-				Edge edge = new Edge(graph[i+7]);
+			if (isLegalIndex(i + 7) && graph[i + 7].weight != -1) {        // DownLeft neighbor
+				Edge edge = new Edge(graph[i + 7]);
 				graph[i].neighbours.add(edge); // add edge from node at index i to node at index i+7
 			}
-			if (isLegalIndex(i - 8)) {        // UpLeft neighbor
-				Edge edge = new Edge(graph[i-8]);
+			if (isLegalIndex(i - 8) && graph[i - 8].weight != -1) {        // UpLeft neighbor
+				Edge edge = new Edge(graph[i - 8]);
 				graph[i].neighbours.add(edge); // add edge from node at index i to node at index i-8
 			}
 		}
@@ -181,51 +185,49 @@ class Main {
 		PriorityQueue<Node> queue = new PriorityQueue<Node>(233, new Comparator<Node>() {
 			@Override //override compare method
 			public int compare(Node n1, Node n2) {
-				if (n1.totalWeight > n2.totalWeight) {
+				if (n1.fValue > n2.fValue) {
 					return 1;
-				} else if (n1.totalWeight < n2.totalWeight) {
+				} else if (n1.fValue < n2.fValue) {
 					return -1;
 				} else {
 					return 0;
 				}
 			}
 		});
-
+		start.cameFrom = start;
 		queue.add(start);
 		System.out.println("\nstarting cost: " + start.weight);
-		while ((!queue.isEmpty()) && (!endReached)) {
+		while ((!queue.isEmpty())) {
 			Node curr = queue.poll();
+			System.out.println("removed: " + curr + " from the queue");
 			visited[curr.index] = true;
 			if (curr.index == end.index) {
 				endReached = true;
+				break;
 			}
-			curr.bestCostToHere = curr.weight;
-			for (Edge e : curr.neighbours) {/*
-				if (e.target.weight == -1){
-					continue;
-				}*/
-				
+			curr.gValue = curr.weight;
+			for (Edge e : curr.neighbours) {
 				Node neighbour = e.target;
 				int weight = e.weight;
-				int tempWeight = curr.bestCostToHere + weight;
-				int tempTotalCost = neighbour.distToEnd + tempWeight;
-				//if neighbour node has been visited and the newer totalWeight is higher, skip it
-				if ((visited[neighbour.index] )	&& (tempTotalCost >= neighbour.totalWeight)) {
+				int tempGValue = curr.gValue + weight; //used to determine if we change camefrom
+				int tempFValue = neighbour.hValue + tempGValue; //used to give priority in the priority queue
+				//if neighbour node has been visited and the newer fValue is higher, skip it
+				if ((visited[neighbour.index]) /*&& (tempFValue >= neighbour.fValue)*/) {
 					continue;
-				}
-				
-				else if((!queue.contains(neighbour)) || (tempTotalCost < neighbour.totalWeight)){
+				} 
+				if((!queue.contains(neighbour)) || (tempFValue < neighbour.fValue)) {
 					neighbour.cameFrom = curr;
-					neighbour.bestCostToHere = tempWeight;
-					neighbour.totalWeight = tempTotalCost;
+					neighbour.gValue = tempGValue;
+					neighbour.fValue = tempFValue;
 
-					if(queue.contains(neighbour)){
-							queue.remove(neighbour);
+					if (!queue.contains(neighbour)) {
+						System.out.println("added node: " + neighbour + " to the queue");
+						queue.add(neighbour);
 					}
-					//System.out.Println("");
-					queue.add(neighbour);
+					
+					
 				}
-				
+
 			}
 		}
 		System.out.println("Finished A star");
@@ -233,28 +235,28 @@ class Main {
 
 	public static void printPath(Node endNode) {
 		int totalCost = 0;
+		int pathLength = 0;
 		List<Node> path = new ArrayList<Node>();
-		for (Node node = endNode; node != null; node = node.cameFrom) {
+		for (Node node = endNode; node.index == 226; node = node.cameFrom) {
 			path.add(node);
 		}
 		Collections.reverse(path);
 		for (Node n : path) {
 			totalCost += n.weight;
+			pathLength++;
 			System.out.println(n.index);
 		}
-		System.out.println("MINIMAL-COST PATH COSTS: " + totalCost);
+		System.out.println("MINIMAL-COST PATH COSTS: " + totalCost+ "\npath length: " + pathLength);
 	}
-	
-	
-} // End class Main
+}
 
 class Node {
 
 	public int index;
 	public int weight;  //the cost to come to here from the previous node
-	public int distToEnd = 0; //euclidean distance to the end node (in edges). 
-	public int bestCostToHere;
-	public int totalWeight; //combined heuristic. weight + distToEnd.
+	public int hValue = 0; //euclidean distance to the end node (in edges). 
+	public int gValue;  
+	public int fValue; //combined heuristic. weight + hValue.
 	public ArrayList<Edge> neighbours = new ArrayList<>();
 	public Node cameFrom; //the node that points to this node
 
@@ -295,8 +297,8 @@ class Node {
 	public Node(int i, int w) {
 		index = i;
 		weight = w;
-		distToEnd = distanceToEnd[i];
-		totalWeight = weight + distToEnd;
+		hValue = distanceToEnd[i];
+		fValue = 99999; // infinity
 	}
 
 	@Override
@@ -305,7 +307,7 @@ class Node {
 			return false;
 		}
 		Node n = (Node) o;
-		return this.index == n.index && this.weight == n.weight && this.distToEnd == n.distToEnd;
+		return this.index == n.index && this.weight == n.weight && this.hValue == n.hValue;
 	}
 
 	public String toString() {
@@ -334,6 +336,6 @@ class Edge {
 	}
 	
 	public String toString() {
-		return "from: " + target.cameFrom.index + " to: " + target.index;
+		return "from: " + target.cameFrom.index + " to: " +target.index;
 	}
 }
