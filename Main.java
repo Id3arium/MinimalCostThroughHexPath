@@ -9,13 +9,13 @@ import java.util.Collections;
 
 class Main {
     public static void main(String[] args) {
-		int[] weights = readGridFromFile("input.txt");
+		int[] weights = readGridFromFile("C:\\Users\\Alex\\Documents\\NetBeansProjects\\HexagonalMazeSolver\\src\\input.txt");
 		Node[] graph = makeGraph(weights);
-
+				
 		printGrid(graph);
-		AStarSearch(graph[226], graph[8]); //end should be 8
+		AStarSearch(graph[226], graph[204]); //end should be 8
 
-		printPath(graph[8]);
+		printPath(graph[204]);
 	} // End main()
 
 	public static void writeRandomGrid(String fileName) {
@@ -194,7 +194,6 @@ class Main {
 				}
 			}
 		});
-		start.cameFrom = start;
 		queue.add(start);
 		System.out.println("\nstarting cost: " + start.weight);
 		while ((!queue.isEmpty())) {
@@ -214,8 +213,8 @@ class Main {
 				//if neighbour node has been visited and the newer fValue is higher, skip it
 				if ((visited[neighbour.index]) /*&& (tempFValue >= neighbour.fValue)*/) {
 					continue;
-				} 
-				if((!queue.contains(neighbour)) || (tempFValue < neighbour.fValue)) {
+				}
+				if ((!queue.contains(neighbour)) || (tempFValue < neighbour.fValue)) {
 					neighbour.cameFrom = curr;
 					neighbour.gValue = tempGValue;
 					neighbour.fValue = tempFValue;
@@ -224,8 +223,7 @@ class Main {
 						System.out.println("added node: " + neighbour + " to the queue");
 						queue.add(neighbour);
 					}
-					
-					
+
 				}
 
 			}
@@ -236,9 +234,11 @@ class Main {
 	public static void printPath(Node endNode) {
 		int totalCost = 0;
 		int pathLength = 0;
+		
 		List<Node> path = new ArrayList<Node>();
-		for (Node node = endNode; node.index == 226; node = node.cameFrom) {
+		for (Node node = endNode; node.cameFrom != null; node = node.cameFrom) {
 			path.add(node);
+			System.out.println("adding to path:" + endNode);
 		}
 		Collections.reverse(path);
 		for (Node n : path) {
@@ -246,8 +246,9 @@ class Main {
 			pathLength++;
 			System.out.println(n.index);
 		}
-		System.out.println("MINIMAL-COST PATH COSTS: " + totalCost+ "\npath length: " + pathLength);
+		System.out.println("MINIMAL-COST PATH COSTS: " + totalCost + "\npath length: " + pathLength);
 	}
+
 }
 
 class Node {
@@ -255,7 +256,7 @@ class Node {
 	public int index;
 	public int weight;  //the cost to come to here from the previous node
 	public int hValue = 0; //euclidean distance to the end node (in edges). 
-	public int gValue;  
+	public int gValue;
 	public int fValue; //combined heuristic. weight + hValue.
 	public ArrayList<Edge> neighbours = new ArrayList<>();
 	public Node cameFrom; //the node that points to this node
@@ -293,12 +294,11 @@ class Node {
 		21, 20, 19, 18, 17, 16, 15,
 		22, 21, 20, 19, 18, 17, 16, 15};
 
-	//public double f_scores = 0;
 	public Node(int i, int w) {
 		index = i;
 		weight = w;
 		hValue = distanceToEnd[i];
-		fValue = 99999; // infinity
+		fValue = 999; // infinity
 	}
 
 	@Override
@@ -309,9 +309,15 @@ class Node {
 		Node n = (Node) o;
 		return this.index == n.index && this.weight == n.weight && this.hValue == n.hValue;
 	}
-
+	@Override
 	public String toString() {
-		return "index: " + index + " weight: " + weight + " came form " + cameFrom.index;
+		String from;
+		if (cameFrom == null){
+			from = "nothing";
+		}else{
+			from = Integer.toString(cameFrom.index);
+		}
+		return "index: " + index + " weight: " + weight + " came form " + from + " hValue: " + hValue;
 	}
 
 }
@@ -325,7 +331,7 @@ class Edge {
 		target = targetNode;
 		weight = targetNode.weight;
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof Edge)) {
@@ -334,8 +340,8 @@ class Edge {
 		Edge e = (Edge) o;
 		return this.target.equals(e.target) && this.target.cameFrom.equals(e.target.cameFrom);
 	}
-	
+	@Override
 	public String toString() {
-		return "from: " + target.cameFrom.index + " to: " +target.index;
+		return "from: " + target.cameFrom.index + " to: " + target.index;
 	}
 }
