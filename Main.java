@@ -9,7 +9,7 @@ import java.util.Collections;
 
 class Main {
     public static void main(String[] args) {
-		int[] weights = readGridFromFile("C:\\Users\\Alex\\Documents\\NetBeansProjects\\HexagonalMazeSolver\\src\\input.txt");
+		int[] weights = readGridFromFile("input.txt");
 		Node[] graph = makeGraph(weights);
 				
 		printGrid(graph);
