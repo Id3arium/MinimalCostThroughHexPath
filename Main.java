@@ -8,7 +8,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 class Main {
+	static long start;
+	static long end;
+	
     public static void main(String[] args) throws IOException {
+    	start = System.currentTimeMillis();
     	PrintWriter pw = new PrintWriter(new FileWriter("output.txt"));
     	
 		int[] weights = readGridFromFile("input.txt");
@@ -171,6 +175,8 @@ class Main {
 		} // End for
 		System.out.println("MINIMAL-COST PATH COSTS: " + totalCost);
 		pw.println("MINIMAL-COST PATH COSTS: " + totalCost);
+		end = System.currentTimeMillis();
+		System.out.println("Time taken: " + (end - start) + " milliseconds");
 	} // End printPath()
 } // End Main class
 
