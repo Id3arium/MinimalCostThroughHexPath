@@ -18,9 +18,9 @@ class Main {
 		int[] weights = readGridFromFile("input.txt");
 		Node[] graph = makeGraph(weights);
 
-		AStarSearch(graph[226], graph[8]); //end should be 8
+		AStarSearch(graph[226], graph[8]);
 
-		printPath(graph[8],graph[226], pw);
+		printPath(graph[8], pw);
 		pw.close();
 	} // End main()
 
@@ -46,7 +46,6 @@ class Main {
 		} // End try
 		return grid;
 	} // End readGridFromFile()
-
 
 	public static boolean isLegalIndex(int i) {
 		return (i >= 1 && i <= 233);
@@ -167,7 +166,7 @@ class Node {
 
 	public int index;
 	public int weight;  //the cost to come to here from the previous node
-	public int hValue = 0; //euclidean distance to the end node (in edges). 
+	public int hValue; //euclidean distance to the end node (in edges). 
 	public int gValue;  
 	public int fValue; //combined heuristic. weight + hValue.
 	public ArrayList<Edge> neighbours = new ArrayList<>();
@@ -206,7 +205,6 @@ class Node {
 		21, 20, 19, 18, 17, 16, 15,
 		22, 21, 20, 19, 18, 17, 16, 15};
 
-	//public double f_scores = 0;
 	public Node(int i, int w) {
 		index = i;
 		weight = w;
