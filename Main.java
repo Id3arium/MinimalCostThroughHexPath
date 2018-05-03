@@ -104,8 +104,6 @@ class Main {
 
 	public static void AStarSearch(Node start, Node end) {
 		boolean[] visited = new boolean[234];
-		boolean endReached = false;
-
 		PriorityQueue<Node> queue = new PriorityQueue<Node>(233, new Comparator<Node>() {
 			@Override //override compare method
 			public int compare(Node n1, Node n2) {
@@ -118,58 +116,43 @@ class Main {
 				} 
 			} // End compare()
 		});
-		start.cameFrom = start;
 		queue.add(start);
 		while ((!queue.isEmpty())) {
 			Node curr = queue.poll();
-			visited[curr.index] = true;
 			if (curr.index == end.index) {
-				endReached = true;
 				break;
 			}
-			
+			visited[curr.index] = true; //pop node from the queue and add its neighbours to the queue
 			for (Edge e : curr.neighbours) {
-
 				Node neighbour = e.target;
-				int weight = e.weight;
-
-				int tempGValue = curr.gValue + weight; //used to determine if we change camefrom
+				int tempGValue = curr.gValue + e.weight; //used to determine if we change camefrom
 				int tempFValue = neighbour.hValue + tempGValue; //used to give priority in the priority queue
-				//if neighbour node has been visited and the newer fValue is higher, skip it
-				
-				if ((visited[neighbour.index]) /*&& (tempFValue >= neighbour.fValue)*/) {
+				if ((visited[neighbour.index])) { //if neighbour node has been visited, skip it
 					continue;
-				} 
-				
-				
-				if((!queue.contains(neighbour)) || (tempFValue < neighbour.fValue)) {
-				  
+				}
+				if ((!queue.contains(neighbour)) || (tempFValue < neighbour.fValue)) {
 					neighbour.cameFrom = curr;
 					neighbour.gValue = tempGValue;
 					neighbour.fValue = tempFValue;
-
+					
 					if (!queue.contains(neighbour)) {
 						queue.add(neighbour);
-					} // End if	
-				} // End if
+					}
+				}
 			} // End for
 		} // End while
 	} // End AStarSearch()
 
-	public static void printPath(Node endNode, Node startNode, PrintWriter pw) {
+	public static void printPath(Node endNode, PrintWriter pw) {
 		int totalCost = 0;
-		int pathLength = 0;
-		
 		List<Node> path = new ArrayList<Node>();
-		for (Node node = endNode; node.index != 226; node = node.cameFrom) {
+		
+		for (Node node = endNode; node != null; node = node.cameFrom) {
 			path.add(node);
-			//if (node.index == 8)
 		} // End for
-		path.add(startNode);
 		Collections.reverse(path);
 		for (Node n : path) {
 			totalCost += n.weight;
-			pathLength++;
 			System.out.println(n.index);
 			pw.println(n.index);
 		} // End for
@@ -228,7 +211,7 @@ class Node {
 		index = i;
 		weight = w;
 		hValue = distanceToEnd[i];
-		fValue = 99999; // infinity
+		fValue = 999999; // infinity
 	}
 
 	@Override
