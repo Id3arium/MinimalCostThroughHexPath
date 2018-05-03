@@ -8,35 +8,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+    	PrintWriter pw = new PrintWriter(new FileWriter("output.txt"));
+    	
 		int[] weights = readGridFromFile("input.txt");
 		Node[] graph = makeGraph(weights);
 
-		printGrid(graph);
 		AStarSearch(graph[226], graph[8]); //end should be 8
 
-		printPath(graph[8],graph[226]);
+		printPath(graph[8],graph[226], pw);
+		pw.close();
 	} // End main()
-
-	public static void writeRandomGrid(String fileName) {
-		PrintWriter pw = null;
-		Random rn = new Random();
-		try {
-			pw = new PrintWriter(new FileWriter(fileName));
-			for (int i = 1; i <= 233; i++) {
-				double randNum = rn.nextDouble();
-				if (randNum > 0.75) {
-					pw.printf("%d   %d\n", i, rn.nextInt(9) + 1);
-				} else {
-					pw.printf("%d  -1\n", i);
-				} // End if
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			pw.close();
-		} // End try
-	} // End writeRandomGrid()
 
 	public static int[] readGridFromFile(String fileName) {
 		int[] grid = new int[234];
@@ -61,91 +43,18 @@ class Main {
 		return grid;
 	} // End readGridFromFile()
 
-	public static void printGrid(int[] grid) {
-		int i = 1;
-		while (true) {
-			for (int j = 0; j < 8; j++) { //print outer row that has 8 hexagons
-				if (i >= 233) {
-					return;
-				}
-				if (grid[i] == -1) {
-					System.out.print("***   "); //print nothing for the -1's
-				} else {
-					System.out.format("%03d   ", grid[i]); //print the weight
-				}
-				i++;
-			}
-			System.out.print("\n   ");
-			for (int k = 0; k < 7; k++) { //print inner row that has 7 hexagons between 2 outer rows
-				if (i >= 233) {
-					return;
-				}
-				if (grid[i] == -1) {
-					System.out.print("***   "); //print nothing for the -1's
-				} else {
-					System.out.format("%03d   ", grid[i]); //print the weight
-				}
-				i++;
-			}
-			System.out.println();
-		}
-	}
-
-	public static void printGrid(Node[] grid) {
-		int i = 1;
-		while (true) {
-			//if ()
-			for (int j = 0; j < 8; j++) {
-				if (i >= 233) {
-					return;
-				}
-				if (grid[i].weight == -1) {
-					System.out.print("***   ");
-				} else {
-					System.out.format("%03d   ", grid[i].weight);
-				}
-				i++;
-			}
-			System.out.print("\n   ");
-			for (int k = 0; k < 7; k++) {
-				if (i >= 233) {
-					return;
-				}
-				if (grid[i].weight == -1) {
-					System.out.print("***   ");
-				} else {
-					System.out.format("%03d   ", grid[i].weight);
-				}
-				i++;
-			}
-			System.out.println();
-		}
-	}
 
 	public static boolean isLegalIndex(int i) {
 		return (i >= 1 && i <= 233);
-	}
+	} // End isLegalIndex()
 	
 	public static boolean isLeftWall(int i){
 		return (i - 1) % 15 == 0;
-	}
+	} // End isLeftWall()
 	
 	public static boolean isRightWall(int i){
 		return (i - 8) % 15 == 0;
-	}
-		
-		/*
-		if ((i - 1) % 15 == 0) { //dont make top left and bottom left connections
-			return false;
-		}
-		*/
-		
-		/*
-		if ((i - 8) % 15 == 0) { //dont make top right and bottom right connections
-			return false;
-		}
-		*/
-
+	} // End isRightWall()
 
 	public static Node[] makeGraph(int[] weights) {
 		Node[] graph = new Node[234];
@@ -153,8 +62,7 @@ class Main {
 			int w = weights[i];
 			Node node = new Node(i, w);
 			graph[i] = node;
-			//System.out.println("created node " + node);
-		}
+		} // End for
 		for (int i = 1; i <= 233; i++) {
 			//for every node check if each of the 6 directions is legal and make 
 			//an edge to the node at that direction if it is.
@@ -186,9 +94,9 @@ class Main {
 				Edge edge = new Edge(graph[i - 8]);
 				graph[i].neighbours.add(edge); // add edge from node at index i to node at index i-8
 			}
-		}
+		} // End for
 		return graph;
-	}
+	} // End makeGraph()
 
 	public static void AStarSearch(Node start, Node end) {
 		boolean[] visited = new boolean[234];
@@ -203,48 +111,32 @@ class Main {
 					return -1;
 				} else {
 					return 0;
-				}
-			}
+				} 
+			} // End compare()
 		});
 		start.cameFrom = start;
 		queue.add(start);
-		System.out.println("\nstarting cost: " + start.weight);
 		while ((!queue.isEmpty())) {
 			Node curr = queue.poll();
-			System.out.println("removed: " + curr + " from the queue");
 			visited[curr.index] = true;
 			if (curr.index == end.index) {
 				endReached = true;
-				System.out.println(" GOAL !!! ");
 				break;
-			}
-			//curr.gValue = curr.weight;        // why only the weight??
-			if(curr.index == 15){
-			 System.out.println("here comes the final..."); //111111
-			 
 			}
 			
 			for (Edge e : curr.neighbours) {
 
 				Node neighbour = e.target;
 				int weight = e.weight;
-			  if(curr.index == 15){
-			   System.out.println("15 points to:" + weight);
-			  }
+
 				int tempGValue = curr.gValue + weight; //used to determine if we change camefrom
 				int tempFValue = neighbour.hValue + tempGValue; //used to give priority in the priority queue
 				//if neighbour node has been visited and the newer fValue is higher, skip it
-				if(neighbour.index == 8){
-				  System.out.println("Neighbor is the GOAL");
-				}
 				
 				if ((visited[neighbour.index]) /*&& (tempFValue >= neighbour.fValue)*/) {
 					continue;
 				} 
 				
-				if(neighbour.index == 8){
-				  System.out.println("Neighbor is the GOAL");
-				}
 				
 				if((!queue.contains(neighbour)) || (tempFValue < neighbour.fValue)) {
 				  
@@ -253,44 +145,34 @@ class Main {
 					neighbour.fValue = tempFValue;
 
 					if (!queue.contains(neighbour)) {
-						System.out.println("added node: " + neighbour + " to the queue");
 						queue.add(neighbour);
-					}	
-				}
-        
-        /*
-        if (queue.contains(neighbour) && tempGValue >= neighbour.gValue)
-        	continue;
-        
-        neighbour.gValue = tempGValue;
-      	neighbour.cameFrom = curr;
-        if (queue.contains(neighbour))
-        	queue.remove(neighbour);
-        queue.add(neighbour);
-        */
-			}
-		}
-		System.out.println("Finished A star");
-	}
+					} // End if	
+				} // End if
+			} // End for
+		} // End while
+	} // End AStarSearch()
 
-	public static void printPath(Node endNode, Node startNode) {
+	public static void printPath(Node endNode, Node startNode, PrintWriter pw) {
 		int totalCost = 0;
 		int pathLength = 0;
+		
 		List<Node> path = new ArrayList<Node>();
 		for (Node node = endNode; node.index != 226; node = node.cameFrom) {
 			path.add(node);
 			//if (node.index == 8)
-		}
+		} // End for
 		path.add(startNode);
 		Collections.reverse(path);
 		for (Node n : path) {
 			totalCost += n.weight;
 			pathLength++;
-			System.out.println(n.index + "    " + n.weight);
-		}
-		System.out.println("MINIMAL-COST PATH COSTS: " + totalCost+ "\npath length: " + pathLength);
-	}
-}
+			System.out.println(n.index);
+			pw.println(n.index);
+		} // End for
+		System.out.println("MINIMAL-COST PATH COSTS: " + totalCost);
+		pw.println("MINIMAL-COST PATH COSTS: " + totalCost);
+	} // End printPath()
+} // End Main class
 
 class Node {
 
@@ -350,13 +232,8 @@ class Node {
 		}
 		Node n = (Node) o;
 		return this.index == n.index && this.weight == n.weight && this.hValue == n.hValue;
-	}
-
-	public String toString() {
-		return "index: " + index + " weight: " + weight + " came form " + cameFrom.index;
-	}
-
-}
+	} // End equals()
+} // End Node class
 
 class Edge {
 
@@ -375,9 +252,5 @@ class Edge {
 		}
 		Edge e = (Edge) o;
 		return this.target.equals(e.target) && this.target.cameFrom.equals(e.target.cameFrom);
-	}
-	
-	public String toString() {
-		return "from: " + target.cameFrom.index + " to: " +target.index;
-	}
-}
+	} // End equals()
+} // End Edge class
